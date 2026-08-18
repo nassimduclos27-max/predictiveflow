@@ -3,656 +3,604 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PredictiveFlow — Plateforme SaaS de maintenance prédictive</title>
+  <title>PredictiveFlow — Maintenance prédictive</title>
   <style>
     :root {
-      --color-accent: #ff7a59;
+      --accent: #ff7a59;
       --ink: #0f172a;
       --muted: #64748b;
       --line: #dbe3ee;
       --soft: #f8fafc;
-      --soft-2: #eef4f8;
+      --soft2: #eef4f8;
       --ok: #16a34a;
       --warn: #d97706;
       --danger: #dc2626;
       --blue: #2563eb;
       --deep: #111827;
-      --card: #ffffff;
-      --shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
-      --radius: 18px;
+      --radius: 16px;
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { margin: 0; font-family: "Lexend Deca", Helvetica, Arial, sans-serif; color: var(--ink); background: #fff; line-height: 1.5; }
+    body { margin: 0; font-family: "Lexend Deca", -apple-system, Helvetica, Arial, sans-serif; color: var(--ink); background: #fff; line-height: 1.5; }
     a { color: inherit; text-decoration: none; }
-    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
-    header { position: sticky; top: 0; z-index: 30; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
-    .nav { display: flex; align-items: center; justify-content: space-between; min-height: 76px; gap: 24px; }
-    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: .02em; }
-    .brand-badge { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--ink); color: white; font-size: 15px; }
-    .nav-links { display: flex; gap: 18px; flex-wrap: wrap; color: var(--muted); font-size: 14px; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    header { position: sticky; top: 0; z-index: 30; background: rgba(255,255,255,.96); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+    .nav { display: flex; align-items: center; justify-content: space-between; min-height: 64px; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+    .brand-badge { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--ink); color: white; font-size: 14px; }
+    .nav-links { display: flex; gap: 16px; color: var(--muted); font-size: 14px; }
     .nav-links a:hover { color: var(--ink); }
-    .nav-cta { display: flex; gap: 12px; align-items: center; }
-    .btn { border: 1px solid var(--line); background: white; color: var(--ink); border-radius: 999px; padding: 11px 16px; font-weight: 600; cursor: pointer; transition: .2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; font-size: 14px; }
-    .btn:hover { transform: translateY(-1px); }
-    .btn.primary { background: var(--color-accent); border-color: var(--color-accent); color: white; }
+    .nav-cta { display: flex; gap: 10px; align-items: center; }
+    .btn { border: 1px solid var(--line); background: white; color: var(--ink); border-radius: 10px; padding: 10px 16px; font-weight: 600; cursor: pointer; transition: .15s; display: inline-flex; align-items: center; gap: 6px; font-family: inherit; font-size: 14px; }
+    .btn:hover { border-color: var(--ink); }
+    .btn.primary { background: var(--accent); border-color: var(--accent); color: white; }
     .btn.dark { background: var(--ink); border-color: var(--ink); color: white; }
-    .btn.sm { padding: 8px 12px; font-size: 13px; }
+    .btn.sm { padding: 6px 10px; font-size: 13px; }
     .btn.danger { background: var(--danger); border-color: var(--danger); color: white; }
-    .hero { padding: 72px 0 40px; border-bottom: 1px solid var(--line); }
-    .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 36px; align-items: start; }
-    .eyebrow { display: inline-block; padding: 8px 12px; border-radius: 999px; background: #fff3ef; color: #9a3412; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 18px; }
-    h1 { margin: 0 0 16px; font-size: 56px; line-height: 1.02; letter-spacing: -0.03em; }
-    .hero p.lead { margin: 0 0 24px; font-size: 18px; color: var(--muted); max-width: 760px; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
-    .mini-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .metric { border-top: 2px solid var(--ink); padding-top: 10px; }
-    .metric strong { display: block; font-size: 28px; }
-    .metric span { color: var(--muted); font-size: 13px; }
-    .hero-panel { background: var(--soft); border: 1px solid var(--line); border-radius: 24px; padding: 20px; box-shadow: var(--shadow); }
-    .stack { display: grid; gap: 14px; }
-    .surface { background: white; border: 1px solid var(--line); border-radius: 18px; padding: 16px; }
-    .surface h3 { margin: 0 0 12px; font-size: 15px; }
-    .status-row { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 10px; font-size: 14px; }
-    .pill { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 700; }
-    .pill.ok { background: #ecfdf5; color: #166534; }
-    .pill.warn { background: #fff7ed; color: #9a3412; }
-    .pill.info { background: #eff6ff; color: #1d4ed8; }
-    .chart-mock { display: grid; grid-template-columns: repeat(8, 1fr); align-items: end; gap: 8px; height: 150px; padding: 12px 6px 4px; }
-    .bar { background: linear-gradient(180deg, #e5e7eb, #cbd5e1); border-radius: 12px 12px 4px 4px; }
-    section { padding: 64px 0; border-bottom: 1px solid var(--line); }
-    .section-head { display: grid; grid-template-columns: .75fr 1.25fr; gap: 30px; margin-bottom: 28px; }
-    .section-head h2 { margin: 0; font-size: 36px; line-height: 1.05; }
-    .section-head p { margin: 0; color: var(--muted); font-size: 16px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-    .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; box-shadow: 0 8px 26px rgba(15,23,42,.04); }
-    .card h3 { margin: 0 0 10px; font-size: 18px; }
-    .card p { margin: 0; color: var(--muted); font-size: 14px; }
-    .feature-list, .plain-list { margin: 12px 0 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
-    .feature-list li, .plain-list li { margin-bottom: 8px; }
-    .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .plan { border: 1px solid var(--line); border-radius: 24px; padding: 22px; background: white; position: relative; }
-    .plan.pro { border-color: var(--color-accent); box-shadow: 0 14px 40px rgba(255,122,89,.12); }
-    .tag { position: absolute; top: 14px; right: 14px; background: var(--color-accent); color: white; padding: 6px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
-    .price { font-size: 44px; margin: 8px 0; font-weight: 700; }
-    .price small { font-size: 14px; color: var(--muted); font-weight: 500; }
-    .app-shell { background: var(--deep); color: white; border-radius: 28px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid #1f2937; }
-    .app-top { padding: 18px 22px; border-bottom: 1px solid rgba(255,255,255,.08); display: flex; justify-content: space-between; gap: 18px; align-items: center; }
-    .app-body { display: grid; grid-template-columns: 250px 1fr; min-height: 680px; }
-    .sidebar { background: #0b1220; padding: 18px; border-right: 1px solid rgba(255,255,255,.06); }
-    .sidebar a { display: block; padding: 12px 14px; border-radius: 14px; color: #cbd5e1; margin-bottom: 8px; font-size: 14px; cursor: pointer; }
-    .sidebar a.active, .sidebar a:hover { background: rgba(255,255,255,.06); color: white; }
-    .main-panel { background: #f8fafc; color: var(--ink); padding: 20px; }
-    .tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
-    .tab { padding: 9px 12px; border-radius: 999px; border: 1px solid var(--line); background: white; font-size: 13px; cursor: pointer; }
-    .tab.active { background: var(--ink); color: white; border-color: var(--ink); }
+    .btn.ghost { background: transparent; border-color: var(--line); color: var(--muted); }
+
+    /* Hero */
+    .hero { padding: 60px 0 40px; border-bottom: 1px solid var(--line); }
+    .hero h1 { margin: 0 0 12px; font-size: 44px; line-height: 1.05; letter-spacing: -.02em; }
+    .hero p.lead { margin: 0 0 20px; font-size: 17px; color: var(--muted); max-width: 600px; }
+    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* Auth modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,.5); display: none; align-items: center; justify-content: center; z-index: 100; }
+    .modal-overlay.active { display: flex; }
+    .modal-box { background: white; border-radius: 20px; padding: 32px; max-width: 420px; width: 90%; }
+    .modal-box h2 { margin: 0 0 20px; font-size: 24px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; font: inherit; background: white;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+    .auth-msg { margin-top: 10px; padding: 10px 12px; border-radius: 8px; font-size: 14px; display: none; }
+    .auth-msg.error { display: block; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .auth-msg.success { display: block; background: #ecfdf5; color: #166534; border: 1px solid #bbf7d0; }
+
+    /* App shell */
+    .app { display: none; }
+    .app.active { display: block; }
+    .app-top { background: var(--deep); color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; }
+    .app-top .user-info { font-size: 13px; color: #cbd5e1; }
+    .app-body { display: grid; grid-template-columns: 220px 1fr; min-height: 80vh; }
+    .sidebar { background: #0b1220; padding: 16px; }
+    .sidebar a { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 10px; color: #94a3b8; margin-bottom: 4px; font-size: 14px; cursor: pointer; transition: .15s; }
+    .sidebar a:hover { background: rgba(255,255,255,.04); color: white; }
+    .sidebar a.active { background: rgba(255,122,89,.15); color: var(--accent); }
+    .sidebar .sec-label { color: #475569; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; padding: 16px 12px 6px; font-weight: 700; }
+    .main-panel { background: #f8fafc; padding: 24px; overflow: auto; }
     .view { display: none; }
     .view.active { display: block; }
-    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
-    .stat-box { background: white; border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
-    .stat-box small { color: var(--muted); display: block; margin-bottom: 8px; }
-    .stat-box strong { font-size: 28px; }
-    .table-wrap { overflow: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; background: white; border-radius: 16px; overflow: hidden; }
-    th, td { border-bottom: 1px solid var(--line); padding: 12px 14px; text-align: left; }
-    th { background: var(--soft-2); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
-    .timeline { border-left: 2px solid var(--line); padding-left: 14px; display: grid; gap: 16px; }
-    .timeline-item strong { display: block; margin-bottom: 5px; }
-    .timeline-item span { font-size: 14px; color: var(--muted); }
-    .notice { border-left: 4px solid var(--blue); background: #eff6ff; color: #1e3a8a; padding: 14px 16px; border-radius: 10px; margin-bottom: 18px; }
-    .auth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .form-preview label { display:block; font-size:13px; color:var(--muted); margin:0 0 6px; }
-    .form-preview input, .form-preview select, .form-preview textarea { width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:12px; font:inherit; margin-bottom:12px; background:white; }
-    .steps { counter-reset: item; display:grid; gap:14px; }
-    .step { display:grid; grid-template-columns: 42px 1fr; gap:14px; align-items:start; padding:16px; border:1px solid var(--line); border-radius:16px; background:white; }
-    .step-num { width:42px; height:42px; border-radius:50%; background:var(--ink); color:white; display:grid; place-items:center; font-weight:700; }
-    .empty-state { border: 1px dashed var(--line); border-radius: 16px; padding: 24px; background: #ffffff; color: var(--muted); text-align: center; }
-    .demo-auth-message { margin-top: 12px; padding: 12px 14px; border-radius: 12px; font-size: 14px; display: none; }
-    .demo-auth-message.error { display: block; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
-    .demo-auth-message.success { display: block; background: #ecfdf5; color: #166534; border: 1px solid #bbf7d0; }
-    .login-log { margin-top: 16px; border: 1px solid var(--line); border-radius: 16px; background: #fff; padding: 16px; }
-    .login-log h4 { margin: 0 0 10px; font-size: 15px; }
-    .login-log ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; }
-    .login-log li { margin-bottom: 6px; }
-    .footer { padding: 28px 0 44px; color: var(--muted); font-size: 14px; }
-    .small-muted { color: var(--muted); font-size: 13px; }
-    .modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.4); z-index: 80; }
-    .modal.active { display: flex; }
-    .modal .card { width: 720px; max-width: 96%; }
-    @media print {
-      header { position: static; }
-      .nav-links, .nav-cta, .tabs, .sidebar { display: none !important; }
-      .wrap { max-width: 100%; padding: 0 10mm; }
-      section { padding: 10mm 0; page-break-inside: avoid; break-inside: avoid; }
-      .hero, .section-head, .card, .plan, .surface, .stat-box, .step, .notice, .app-shell, .main-panel, .table-wrap, table { page-break-inside: avoid; break-inside: avoid; }
-      .hero-grid, .section-head, .plans, .grid-2, .grid-3, .grid-4, .stats-row, .auth-grid, .app-body { display: block; }
-      .card, .plan, .surface, .stat-box, .notice, .step { margin-bottom: 12px; }
-      .app-shell { border: 1px solid #cbd5e1; box-shadow: none; }
-      .app-top { color: #111827; background: #ffffff; border-bottom: 1px solid #dbe3ee; }
-      .main-panel { padding: 0; background: #ffffff; }
-      .view { display: block !important; margin-bottom: 16px; }
-      .chart-mock { height: 90px; }
-      h1 { font-size: 28px; }
-      .section-head h2 { font-size: 22px; }
-      .price { font-size: 30px; }
-      body { background: white; }
-    }
-    @media (max-width: 1100px) {
-      .hero-grid, .section-head, .plans, .grid-2, .grid-3, .grid-4, .stats-row, .app-body, .auth-grid { grid-template-columns: 1fr; }
-      .mini-metrics { grid-template-columns: 1fr; }
-      h1 { font-size: 42px; }
-      .nav { flex-wrap: wrap; padding: 10px 0; }
-      .nav-links { order: 3; width: 100%; }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .stat-card { background: white; border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; }
+    .stat-card .label { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+    .stat-card .value { font-size: 32px; font-weight: 700; }
+    .stat-card .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .stat-card.alert .value { color: var(--danger); }
+    .stat-card.warn .value { color: var(--warn); }
+    .stat-card.ok .value { color: var(--ok); }
+
+    /* Tables */
+    .table-card { background: white; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; }
+    .table-card .tc-head { display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+    .table-card .tc-head h3 { margin: 0; font-size: 16px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px 12px; text-align: left; white-space: nowrap; }
+    th { background: var(--soft2); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; }
+    tr:hover td { background: var(--soft); }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+    .badge.ok { background: #ecfdf5; color: #166534; }
+    .badge.alarm { background: #fef2f2; color: #991b1b; }
+    .badge.warn { background: #fff7ed; color: #9a3412; }
+    .badge.critique { background: #fef2f2; color: #991b1b; }
+    .badge.haute { background: #fff7ed; color: #9a3412; }
+    .badge.moyenne { background: #eff6ff; color: #1d4ed8; }
+    .badge.basse { background: #f0fdf4; color: #166534; }
+
+    .row-actions { display: flex; gap: 6px; }
+    .row-actions button { border: none; background: none; cursor: pointer; font-size: 13px; color: var(--blue); padding: 2px 4px; }
+    .row-actions button.del { color: var(--danger); }
+
+    /* Empty */
+    .empty { border: 1px dashed var(--line); border-radius: 12px; padding: 32px; text-align: center; color: var(--muted); background: white; }
+
+    /* Notice */
+    .notice { border-left: 3px solid var(--blue); background: #eff6ff; color: #1e3a8a; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
+    .notice.warn { border-color: var(--warn); background: #fff7ed; color: #9a3412; }
+
+    /* Weibull */
+    .weibull-result { background: white; border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+    .weibull-result h3 { margin: 0 0 14px; font-size: 18px; }
+    .weibull-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+    .weibull-stat { background: var(--soft); border-radius: 10px; padding: 14px; }
+    .weibull-stat .label { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .weibull-stat .value { font-size: 22px; font-weight: 700; }
+    .weibull-table { margin-top: 16px; }
+    .weibull-chart { margin-top: 16px; }
+
+    /* Misc */
+    .page-head { margin-bottom: 20px; }
+    .page-head h2 { margin: 0 0 4px; font-size: 24px; }
+    .page-head p { margin: 0; color: var(--muted); font-size: 14px; }
+    .section-divider { color: #334155; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; padding: 12px 12px 4px; font-weight: 700; }
+    .footer { padding: 24px 0; text-align: center; color: var(--muted); font-size: 13px; }
+    .two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 768px) {
+      .app-body { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .two-cols { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- ============ HEADER ============ -->
+<!-- ============ NAV ============ -->
 <header>
-  <div class="wrap">
-    <div class="nav">
-      <div class="brand">
-        <div class="brand-badge">PF</div>
-        <span>PredictiveFlow</span>
-      </div>
-      <nav class="nav-links">
+  <div class="wrap nav">
+    <div class="brand">
+      <div class="brand-badge">PF</div>
+      <span>PredictiveFlow</span>
+    </div>
+    <div id="nav-guest">
+      <div class="nav-links" style="display:inline-flex;gap:16px;">
         <a href="#features">Fonctionnalités</a>
-        <a href="#plans">Tarifs</a>
-        <a href="#dashboard" onclick="showLogin();return false;">Connexion</a>
-        <a href="#dashboard" onclick="showRegister();return false;">Inscription</a>
-      </nav>
-      <div class="nav-cta">
-        <button class="btn primary" onclick="showRegister()">Commencer</button>
+        <a href="#" onclick="showLogin();return false;">Connexion</a>
       </div>
+      <button class="btn primary" style="margin-left:12px;" onclick="showRegister()">Commencer</button>
+    </div>
+    <div id="nav-user" style="display:none;">
+      <span class="user-info" id="nav-email" style="margin-right:12px;color:var(--muted);font-size:14px;"></span>
+      <button class="btn ghost sm" onclick="logout()">Déconnexion</button>
     </div>
   </div>
 </header>
 
-<!-- ============ HERO ============ -->
-<section class="hero">
-  <div class="wrap">
-    <div class="hero-grid">
-      <div>
-        <span class="eyebrow">Maintenance prédictive</span>
-        <h1>Anticipez les pannes avant qu'elles n'arrivent</h1>
-        <p class="lead">PredictiveFlow analyse vos données machines en temps réel pour prédire les défaillances, optimiser la maintenance et réduire les coûts d'arrêt.</p>
-        <div class="hero-actions">
-          <button class="btn primary" onclick="showRegister()">Démarrer gratuitement</button>
-          <a class="btn" href="#features">Voir les fonctionnalités</a>
-        </div>
-        <div class="mini-metrics">
-          <div class="metric"><strong>-42%</strong><span>Arrêts non planifiés</span></div>
-          <div class="metric"><strong>99.2%</strong><span>Précision prédictions</span></div>
-          <div class="metric"><strong>24/7</strong><span>Surveillance continue</span></div>
-        </div>
+<!-- ============ LANDING ============ -->
+<div id="landing">
+  <div class="wrap hero">
+    <h1>Maintenance prédictive<br>propulsée par Weibull</h1>
+    <p class="lead">Surveillez vos équipements, enregistrez les pannes, analysez la fiabilité avec le modèle Weibull. De la donnée brute à la prédiction, sur une seule plateforme.</p>
+    <div class="hero-actions">
+      <button class="btn primary" onclick="showRegister()">Démarrer gratuitement</button>
+      <button class="btn dark" onclick="showLogin()">Se connecter</button>
+    </div>
+  </div>
+  <div class="wrap" style="padding:40px 24px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;" id="features">
+      <div style="background:white;border:1px solid var(--line);border-radius:16px;padding:20px;">
+        <h3 style="margin:0 0 8px;">Paramètres de surveillance</h3>
+        <p style="margin:0;color:var(--muted);font-size:14px;">Définissez les composants à surveiller avec seuils et criticité.</p>
       </div>
-      <div class="hero-panel">
-        <div class="stack">
-          <div class="surface">
-            <h3>État du parc — Temps réel</h3>
-            <div class="status-row"><span>Machine A-12</span><span class="pill ok">OK</span></div>
-            <div class="status-row"><span>Machine B-07</span><span class="pill warn">Surveillance</span></div>
-            <div class="status-row"><span>Machine C-03</span><span class="pill ok">OK</span></div>
-            <div class="status-row"><span>Compresseur X-1</span><span class="pill info">Maintenance</span></div>
-          </div>
-          <div class="surface">
-            <h3>Prédictions Weibull (7 jours)</h3>
-            <div class="chart-mock">
-              <div class="bar" style="height:45%"></div>
-              <div class="bar" style="height:62%"></div>
-              <div class="bar" style="height:38%"></div>
-              <div class="bar" style="height:78%"></div>
-              <div class="bar" style="height:55%"></div>
-              <div class="bar" style="height:90%"></div>
-              <div class="bar" style="height:70%"></div>
-              <div class="bar" style="height:48%"></div>
-            </div>
-          </div>
-        </div>
+      <div style="background:white;border:1px solid var(--line);border-radius:16px;padding:20px;">
+        <h3 style="margin:0 0 8px;">Données brutes & alarmes auto</h3>
+        <p style="margin:0;color:var(--muted);font-size:14px;">Saisissez vos mesures, les alarmes se génèrent automatiquement.</p>
+      </div>
+      <div style="background:white;border:1px solid var(--line);border-radius:16px;padding:20px;">
+        <h3 style="margin:0 0 8px;">Analyse Weibull</h3>
+        <p style="margin:0;color:var(--muted);font-size:14px;">Estimez beta et alpha pour prédire le MTBF de vos composants.</p>
+      </div>
+      <div style="background:white;border:1px solid var(--line);border-radius:16px;padding:20px;">
+        <h3 style="margin:0 0 8px;">Indicateurs & KPIs</h3>
+        <p style="margin:0;color:var(--muted);font-size:14px;">Coût total, durée d'arrêt, nombre de pannes — calculés en temps réel.</p>
       </div>
     </div>
   </div>
-</section>
-
-<!-- ============ FEATURES ============ -->
-<section id="features">
-  <div class="wrap">
-    <div class="section-head">
-      <h2>Tout ce qu'il faut pour une maintenance intelligente</h2>
-      <p>Une plateforme complète qui couvre l'analyse de données, la prédiction des pannes et la gestion de votre parc machine.</p>
-    </div>
-    <div class="grid-3">
-      <div class="card">
-        <h3> Analyse Weibull</h3>
-        <p>Modélisation statistique avancée pour estimer la durée de vie restante de chaque équipement.</p>
-        <ul class="feature-list">
-          <li>Estimation MTBF & MTTR</li>
-          <li>Courbes de fiabilité</li>
-          <li>Alertes de seuil personnalisables</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Surveillance temps réel</h3>
-        <p>Tableau de bord en direct avec statut de chaque machine, capteurs IoT et historique complet.</p>
-        <ul class="feature-list">
-          <li>Intégration capteurs IoT</li>
-          <li>Tableau de bord unifié</li>
-          <li>Historique illimité</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Gestion d'équipe</h3>
-        <p>Gérez vos techniciens, assignez les interventions et suivez l'avancement en temps réel.</p>
-        <ul class="feature-list">
-          <li>Rôles & permissions</li>
-          <li>Assignation d'incidents</li>
-          <li>Rapports automatisés</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Export & reporting</h3>
-        <p>Exportez vos données en Excel, générez des rapports de maintenance et partagez-les facilement.</p>
-        <ul class="feature-list">
-          <li>Export Excel / CSV</li>
-          <li>Rapports planifiés</li>
-          <li>API REST complète</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Alertes intelligentes</h3>
-        <p>Notifications push et e-mail quand une machine approche d'une probabilité de panne critique.</p>
-        <ul class="feature-list">
-          <li>Seuils dynamiques</li>
-          <li>Notifications multi-canal</li>
-          <li>Escalade automatique</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Sécurité & conformité</h3>
-        <p>Authentification JWT, chiffrement des données et traçabilité complète des actions.</p>
-        <ul class="feature-list">
-          <li>Auth JWT sécurisée</li>
-          <li>Journal d'audit complet</li>
-          <li>Données chiffrées</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ PLANS ============ -->
-<section id="plans">
-  <div class="wrap">
-    <div class="section-head">
-      <h2>Des tarifs simples et transparents</h2>
-      <p>Choisissez l'offre adaptée à la taille de votre parc machine. Changez de formule à tout moment.</p>
-    </div>
-    <div class="plans" id="plans-grid">
-      <!-- Rempli par JS -->
-    </div>
-  </div>
-</section>
+</div>
 
 <!-- ============ AUTH MODAL ============ -->
-<div class="modal" id="auth-modal">
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
-      <h2 id="auth-title" style="margin:0;font-size:24px;">Connexion</h2>
-      <button class="btn sm" onclick="closeAuth()">✕</button>
-    </div>
-    <div id="auth-message" class="demo-auth-message"></div>
+<div class="modal-overlay" id="auth-modal">
+  <div class="modal-box">
+    <h2 id="auth-title">Connexion</h2>
+    <div id="auth-msg" class="auth-msg"></div>
+
     <div id="login-form">
-      <div class="form-preview">
-        <label for="login-email">Email</label>
+      <div class="form-group">
+        <label>Email</label>
         <input type="email" id="login-email" placeholder="vous@entreprise.com" />
-        <label for="login-password">Mot de passe</label>
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
         <input type="password" id="login-password" placeholder="••••••••" />
-        <button class="btn primary" style="width:100%" onclick="doLogin()">Se connecter</button>
-        <p class="small-muted" style="margin-top:14px;text-align:center;">
-          Pas encore de compte ? <a href="#" onclick="showRegister();return false;" style="color:var(--color-accent);font-weight:600;">Inscrivez-vous</a>
-        </p>
-        <p class="small-muted" style="text-align:center;margin-top:8px;">
-          Démo admin : admin@predictiveflow.test / demo1234
-        </p>
       </div>
+      <button class="btn primary" style="width:100%;justify-content:center;" onclick="doLogin()">Se connecter</button>
+      <p style="text-align:center;margin-top:14px;font-size:14px;color:var(--muted);">
+        Pas de compte ? <a href="#" onclick="showRegister();return false;" style="color:var(--accent);font-weight:600;">Inscrivez-vous</a>
+      </p>
     </div>
+
     <div id="register-form" style="display:none;">
-      <div class="form-preview">
-        <label for="reg-name">Nom complet</label>
-        <input type="text" id="reg-name" placeholder="Jean Dupont" />
-        <label for="reg-company">Entreprise (optionnel)</label>
-        <input type="text" id="reg-company" placeholder="ACME Industries" />
-        <label for="reg-email">Email</label>
+      <div class="form-group">
+        <label>Nom</label>
+        <input type="text" id="reg-name" placeholder="Votre nom" />
+      </div>
+      <div class="form-group">
+        <label>Entreprise (optionnel)</label>
+        <input type="text" id="reg-company" placeholder="Nom de l'entreprise" />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
         <input type="email" id="reg-email" placeholder="vous@entreprise.com" />
-        <label for="reg-password">Mot de passe</label>
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
         <input type="password" id="reg-password" placeholder="••••••••" />
-        <label for="reg-plan">Formule</label>
-        <select id="reg-plan"></select>
-        <button class="btn primary" style="width:100%" onclick="doRegister()">Créer mon compte</button>
-        <p class="small-muted" style="margin-top:14px;text-align:center;">
-          Déjà inscrit ? <a href="#" onclick="showLogin();return false;" style="color:var(--color-accent);font-weight:600;">Connectez-vous</a>
-        </p>
       </div>
+      <button class="btn primary" style="width:100%;justify-content:center;" onclick="doRegister()">Créer mon compte</button>
+      <p style="text-align:center;margin-top:14px;font-size:14px;color:var(--muted);">
+        Déjà inscrit ? <a href="#" onclick="showLogin();return false;" style="color:var(--accent);font-weight:600;">Connectez-vous</a>
+      </p>
     </div>
   </div>
 </div>
 
-<!-- ============ DASHBOARD ============ -->
-<section id="dashboard" style="display:none;">
-  <div class="wrap">
-    <div class="app-shell">
-      <div class="app-top">
-        <div class="brand" style="color:white;">
-          <div class="brand-badge">PF</div>
-          <span>PredictiveFlow</span>
-        </div>
-        <div style="display:flex;gap:12px;align-items:center;">
-          <span id="dash-user" style="font-size:14px;color:#cbd5e1;"></span>
-          <button class="btn sm" onclick="logout()">Déconnexion</button>
-        </div>
-      </div>
-      <div class="app-body">
-        <div class="sidebar" id="sidebar-nav">
-          <a class="active" data-view="overview" onclick="switchView('overview')">Vue d'ensemble</a>
-          <a data-view="machines" onclick="switchView('machines')">Machines</a>
-          <a data-view="predictions" onclick="switchView('predictions')">Prédictions</a>
-          <a data-view="plans" onclick="switchView('plans')" id="nav-plans" style="display:none;">Tarifs</a>
-          <a data-view="users" onclick="switchView('users')" id="nav-users" style="display:none;">Utilisateurs</a>
-          <a data-view="log" onclick="switchView('log')" id="nav-log" style="display:none;">Journal</a>
-        </div>
-        <div class="main-panel">
-          <!-- Overview -->
-          <div class="view active" id="view-overview">
-            <div class="tabs">
-              <span class="tab active">Tableau de bord</span>
-            </div>
-            <div class="stats-row">
-              <div class="stat-box"><small>Machines surveillées</small><strong id="stat-total">0</strong></div>
-              <div class="stat-box"><small>Alertes actives</small><strong id="stat-alerts" style="color:var(--warn)">0</strong></div>
-              <div class="stat-box"><small>En maintenance</small><strong id="stat-maintenance">0</strong></div>
-              <div class="stat-box"><small>Disponibles</small><strong id="stat-ok" style="color:var(--ok)">0</strong></div>
-            </div>
-            <div class="grid-2">
-              <div class="card">
-                <h3>État du parc</h3>
-                <div id="overview-parc"></div>
-              </div>
-              <div class="card">
-                <h3>Dernières interventions</h3>
-                <div class="timeline">
-                  <div class="timeline-item"><strong>Remplacement roulement B-07</strong><span>Il y a 2h — Technicien: M. Martin</span></div>
-                  <div class="timeline-item"><strong>Calibration capteur C-03</strong><span>Hier — Technicien: S. Bernard</span></div>
-                  <div class="timeline-item"><strong>Inspection X-1</strong><span>Il y a 3j — Technicien: M. Martin</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Machines -->
-          <div class="view" id="view-machines">
-            <div class="tabs"><span class="tab active">Parc machine</span></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-              <h3 style="margin:0;font-size:18px;">Gestion du parc machine</h3>
-              <button class="btn primary" onclick="openMachineModal()">+ Ajouter une machine</button>
-            </div>
-            <div class="table-wrap">
-              <table id="machines-table">
-                <thead><tr><th>ID</th><th>Nom</th><th>Type</th><th>Statut</th><th>Localisation</th><th>Dernière inspection</th><th>Prochaine prédite</th><th>Actions</th></tr></thead>
-                <tbody id="machines-tbody">
-                  <tr><td colspan="8" style="text-align:center;color:var(--muted);">Chargement…</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Predictions -->
-          <div class="view" id="view-predictions">
-            <div class="tabs"><span class="tab active">Analyse Weibull</span></div>
-            <div class="notice">Les prédictions sont calculées à partir des données de vibration, température et cycles d'utilisation via le modèle Weibull.</div>
-            <div class="grid-2">
-              <div class="card">
-                <h3>Courbe de fiabilité — Machine B-07</h3>
-                <div class="chart-mock" style="height:200px;">
-                  <div class="bar" style="height:92%"></div>
-                  <div class="bar" style="height:85%"></div>
-                  <div class="bar" style="height:78%"></div>
-                  <div class="bar" style="height:65%"></div>
-                  <div class="bar" style="height:50%"></div>
-                  <div class="bar" style="height:35%"></div>
-                  <div class="bar" style="height:22%"></div>
-                  <div class="bar" style="height:12%"></div>
-                </div>
-                <p class="small-muted" style="margin-top:10px;">Probabilité de panne augmentant à J+14. Intervention recommandée avant le 22/08.</p>
-              </div>
-              <div class="card">
-                <h3>Paramètres Weibull</h3>
-                <div class="status-row"><span>Forme (β)</span><strong>2.3</strong></div>
-                <div class="status-row"><span>Échelle (η)</span><strong>1840h</strong></div>
-                <div class="status-row"><span>MTBF estimé</span><strong>1620h</strong></div>
-                <div class="status-row"><span>Confiance</span><strong>94%</strong></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Plans management (admin) -->
-          <div class="view" id="view-plans">
-            <div class="tabs"><span class="tab active">Gestion des tarifs</span></div>
-            <button class="btn primary" style="margin-bottom:16px;" onclick="openPlanModal()">+ Nouvelle formule</button>
-            <div class="table-wrap">
-              <table id="admin-plans-table">
-                <thead><tr><th>Nom</th><th>Prix</th><th>Recommandée</th><th>Actions</th></tr></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Users management (admin) -->
-          <div class="view" id="view-users">
-            <div class="tabs"><span class="tab active">Utilisateurs inscrits</span></div>
-            <div class="table-wrap">
-              <table id="admin-users-table">
-                <thead><tr><th>Nom</th><th>Entreprise</th><th>Email</th><th>Formule</th><th>Inscrit le</th><th>Actions</th></tr></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Admin log -->
-          <div class="view" id="view-log">
-            <div class="tabs"><span class="tab active">Journal d'audit</span></div>
-            <div class="login-log">
-              <h4>Derniers événements</h4>
-              <ul id="admin-log-list"></ul>
-            </div>
-          </div>
-        </div>
-      </div>
+<!-- ============ APP (DASHBOARD) ============ -->
+<div id="app" class="app">
+  <div class="app-top">
+    <strong>PredictiveFlow</strong>
+    <div class="user-info">
+      <span id="app-email"></span>
+      <span id="app-role" style="margin-left:8px;opacity:.6;"></span>
     </div>
   </div>
-</section>
-
-<!-- ============ PLAN EDIT MODAL ============ -->
-<div class="modal" id="plan-modal">
-  <div class="card" style="width:500px;max-width:96%;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
-      <h3 style="margin:0;font-size:20px;" id="plan-modal-title">Nouvelle formule</h3>
-      <button class="btn sm" onclick="closePlanModal()">✕</button>
+  <div class="app-body">
+    <div class="sidebar">
+      <a class="active" data-view="dashboard" onclick="switchView('dashboard')">📊 Tableau de bord</a>
+      <div class="sec-label">Configuration</div>
+      <a data-view="parameters" onclick="switchView('parameters')">⚙️ Paramètres</a>
+      <a data-view="machines" onclick="switchView('machines')">🔧 Machines</a>
+      <div class="sec-label">Données</div>
+      <a data-view="rawdata" onclick="switchView('rawdata')">📋 Données brutes</a>
+      <a data-view="alarms" onclick="switchView('alarms')">🚨 Alarmes auto</a>
+      <a data-view="maintenance" onclick="switchView('maintenance')">🛠️ Maintenance</a>
+      <div class="sec-label">Analyse</div>
+      <a data-view="indicators" onclick="switchView('indicators')">📈 Indicateurs</a>
+      <a data-view="weibull" onclick="switchView('weibull')">📐 Weibull</a>
     </div>
-    <div class="form-preview">
-      <label>Nom</label>
-      <input type="text" id="plan-name" />
-      <label>Prix (€)</label>
-      <input type="number" id="plan-price" />
-      <label>Période</label>
-      <input type="text" id="plan-per" placeholder="/mois" />
-      <label>Fonctionnalités (une par ligne)</label>
-      <textarea id="plan-features" rows="4" placeholder="limite machines: 10&#10;module Weibull"></textarea>
-      <label>Recommandée</label>
-      <select id="plan-recommended"><option value="false">Non</option><option value="true">Oui</option></select>
-      <button class="btn primary" style="width:100%" onclick="savePlan()">Enregistrer</button>
+
+    <div class="main-panel">
+
+      <!-- ===== DASHBOARD ===== -->
+      <div class="view active" id="view-dashboard">
+        <div class="page-head">
+          <h2>Tableau de bord</h2>
+          <p>Vue d'ensemble de votre maintenance prédictive</p>
+        </div>
+        <div class="stats-grid" id="dash-stats"></div>
+        <div class="notice" id="dash-notice" style="display:none;"></div>
+        <div class="table-card">
+          <div class="tc-head"><h3>Alarmes récentes</h3></div>
+          <div class="table-wrap">
+            <table id="dash-alarms-table">
+              <thead><tr><th>Timestamp</th><th>Composant</th><th>Variable</th><th>Valeur</th><th>Statut</th><th>Seuils</th></tr></thead>
+              <tbody id="dash-alarms-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PARAMETERS ===== -->
+      <div class="view" id="view-parameters">
+        <div class="page-head">
+          <h2>Paramètres de surveillance</h2>
+          <p>Définissez les composants et variables à surveiller avec leurs seuils et criticité</p>
+        </div>
+        <div style="margin-bottom:16px;">
+          <button class="btn primary" onclick="openParamModal()">+ Ajouter un paramètre</button>
+        </div>
+        <div class="table-card">
+          <div class="table-wrap">
+            <table id="params-table">
+              <thead><tr><th>Composant</th><th>Zone</th><th>Variable</th><th>Tag</th><th>Unité</th><th>Seuil bas</th><th>Seuil haut</th><th>Criticité</th><th>Fréq.</th><th>Actions</th></tr></thead>
+              <tbody id="params-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== MACHINES ===== -->
+      <div class="view" id="view-machines">
+        <div class="page-head">
+          <h2>Parc machines</h2>
+          <p>Gérez votre parc d'équipements</p>
+        </div>
+        <div style="margin-bottom:16px;">
+          <button class="btn primary" onclick="openMachineModal()">+ Ajouter une machine</button>
+        </div>
+        <div class="table-card">
+          <div class="table-wrap">
+            <table id="machines-table">
+              <thead><tr><th>Nom</th><th>Type</th><th>Statut</th><th>Localisation</th><th>Dernière inspection</th><th>Actions</th></tr></thead>
+              <tbody id="machines-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== RAW DATA ===== -->
+      <div class="view" id="view-rawdata">
+        <div class="page-head">
+          <h2>Données brutes</h2>
+          <p>Saisissez vos mesures — le statut et les seuils se calculent automatiquement</p>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+          <button class="btn primary" onclick="openRawModal()">+ Ajouter une mesure</button>
+          <button class="btn sm" onclick="openBulkModal()">📥 Import en lot</button>
+          <button class="btn sm danger" onclick="clearRawData()" style="margin-left:auto;">Tout effacer</button>
+        </div>
+        <div class="notice" id="raw-notice" style="display:none;">
+          Les colonnes Statut, Unité et Seuils sont remplies automatiquement à partir des Paramètres.
+        </div>
+        <div class="table-card">
+          <div class="table-wrap">
+            <table id="raw-table">
+              <thead><tr><th>Date</th><th>Ligne</th><th>Zone</th><th>Composant</th><th>Tag</th><th>Variable</th><th>Valeur</th><th>Unité</th><th>Statut</th><th>Seuil bas</th><th>Seuil haut</th><th>Actions</th></tr></thead>
+              <tbody id="raw-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ALARMS ===== -->
+      <div class="view" id="view-alarms">
+        <div class="page-head">
+          <h2>Alarmes automatiques</h2>
+          <p>Générées automatiquement quand une mesure dépasse les seuils définis</p>
+        </div>
+        <div style="margin-bottom:16px;">
+          <button class="btn sm danger" onclick="clearAlarms()">Effacer les alarmes</button>
+        </div>
+        <div class="table-card">
+          <div class="table-wrap">
+            <table id="alarms-table">
+              <thead><tr><th>Timestamp</th><th>Ligne</th><th>Zone</th><th>Composant</th><th>Variable</th><th>Valeur</th><th>Unité</th><th>Statut</th><th>Seuils</th></tr></thead>
+              <tbody id="alarms-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== MAINTENANCE ===== -->
+      <div class="view" id="view-maintenance">
+        <div class="page-head">
+          <h2>Maintenance</h2>
+          <p>Enregistrez les pannes et interventions</p>
+        </div>
+        <div style="margin-bottom:16px;">
+          <button class="btn primary" onclick="openMaintModal()">+ Enregistrer une panne</button>
+        </div>
+        <div class="table-card">
+          <div class="table-wrap">
+            <table id="maint-table">
+              <thead><tr><th>ID</th><th>Date</th><th>Composant</th><th>Type</th><th>Temps avant panne</th><th>Cycles</th><th>Action</th><th>Pièce</th><th>Arrêt (h)</th><th>Coût (€)</th><th>Actions</th></tr></thead>
+              <tbody id="maint-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== INDICATORS ===== -->
+      <div class="view" id="view-indicators">
+        <div class="page-head">
+          <h2>Indicateurs & KPIs</h2>
+          <p>Calculés automatiquement à partir des données saisies</p>
+        </div>
+        <div class="stats-grid" id="ind-global"></div>
+        <div class="two-cols">
+          <div class="table-card">
+            <div class="tc-head"><h3>Par composant</h3></div>
+            <div class="table-wrap">
+              <table id="ind-comp-table">
+                <thead><tr><th>Composant</th><th>Pannes</th><th>Temps moyen</th><th>Cycles moyens</th><th>Coût total</th></tr></thead>
+                <tbody id="ind-comp-body"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="table-card">
+            <div class="tc-head"><h3>Alarmes par variable</h3></div>
+            <div class="table-wrap">
+              <table id="ind-var-table">
+                <thead><tr><th>Variable</th><th>Nb alarmes</th></tr></thead>
+                <tbody id="ind-var-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== WEIBULL ===== -->
+      <div class="view" id="view-weibull">
+        <div class="page-head">
+          <h2>Analyse Weibull</h2>
+          <p>Estimation des paramètres β (forme) et α (échelle) pour la fiabilité des composants</p>
+        </div>
+        <div style="margin-bottom:16px;display:flex;gap:10px;align-items:center;">
+          <label style="font-size:14px;color:var(--muted);">Composant :</label>
+          <select id="weibull-select" onchange="loadWeibull()" style="padding:8px 12px;border:1px solid var(--line);border-radius:8px;font:inherit;">
+            <option value="all">Tous</option>
+          </select>
+        </div>
+        <div id="weibull-results"></div>
+      </div>
+
     </div>
   </div>
 </div>
 
+<!-- ============ MODALS ============ -->
 
-<!-- ============ MACHINE EDIT MODAL ============ -->
-<div class="modal" id="machine-modal">
-  <div class="card" style="width:500px;max-width:96%;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
-      <h3 style="margin:0;font-size:20px;" id="machine-modal-title">Ajouter une machine</h3>
-      <button class="btn sm" onclick="closeMachineModal()">✕</button>
+<!-- Param modal -->
+<div class="modal-overlay" id="param-modal">
+  <div class="modal-box" style="max-width:560px;">
+    <h2 id="param-modal-title">Ajouter un paramètre</h2>
+    <div class="form-group"><label>Composant *</label><input type="text" id="p-composant" placeholder="ex: Pompe P1" /></div>
+    <div class="two-cols">
+      <div class="form-group"><label>Zone</label><input type="text" id="p-zone" placeholder="ex: Atelier A" /></div>
+      <div class="form-group"><label>Variable *</label><input type="text" id="p-variable" placeholder="ex: Température" /></div>
     </div>
-    <div class="form-preview">
-      <label>Nom</label>
-      <input type="text" id="machine-name" placeholder="Pompe hydraulique" />
-      <label>Type</label>
-      <select id="machine-type">
-        <option value="Pompe">Pompe</option>
-        <option value="Moteur">Moteur</option>
-        <option value="Compresseur">Compresseur</option>
-        <option value="Turbine">Turbine</option>
-        <option value="Convoyeur">Convoyeur</option>
-        <option value="Robot">Robot</option>
-        <option value="Autre">Autre</option>
-      </select>
-      <label>Statut</label>
-      <select id="machine-status">
-        <option value="ok">OK</option>
-        <option value="warn">Surveillance</option>
-        <option value="maintenance">Maintenance</option>
-      </select>
-      <label>Localisation</label>
-      <input type="text" id="machine-location" placeholder="Atelier A — Ligne 1" />
-      <label>Dernière inspection</label>
-      <input type="text" id="machine-last-insp" placeholder="10/08/2026" />
-      <label>Prochaine prédite</label>
-      <input type="text" id="machine-next-pred" placeholder="14/09/2026" />
-      <label>Notes</label>
-      <textarea id="machine-notes" rows="2" placeholder="Remarques…"></textarea>
-      <button class="btn primary" style="width:100%" onclick="saveMachine()">Enregistrer</button>
+    <div class="two-cols">
+      <div class="form-group"><label>Tag</label><input type="text" id="p-tag" placeholder="ex: TT-101" /></div>
+      <div class="form-group"><label>Unité</label><input type="text" id="p-unite" placeholder="ex: °C" /></div>
+    </div>
+    <div class="form-group"><label>Type de signal</label>
+      <select id="p-type-signal"><option>Analogique</option><option>Numérique</option><option>Binaire</option></select>
+    </div>
+    <div class="two-cols">
+      <div class="form-group"><label>Seuil bas</label><input type="number" step="any" id="p-seuil-bas" placeholder="ex: 10" /></div>
+      <div class="form-group"><label>Seuil haut</label><input type="number" step="any" id="p-seuil-haut" placeholder="ex: 90" /></div>
+    </div>
+    <div class="two-cols">
+      <div class="form-group"><label>Criticité</label>
+        <select id="p-criticite"><option value="Basse">Basse</option><option value="Moyenne" selected>Moyenne</option><option value="Haute">Haute</option><option value="Critique">Critique</option></select>
+      </div>
+      <div class="form-group"><label>Fréquence d'acquisition</label><input type="text" id="p-frequence" placeholder="ex: 1/s" /></div>
+    </div>
+    <div class="form-group"><label>Date de mise en service</label><input type="date" id="p-date-mes" /></div>
+    <div class="form-group"><label>Commentaire</label><textarea id="p-commentaire" rows="2"></textarea></div>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="btn primary" onclick="saveParam()">Enregistrer</button>
+      <button class="btn" onclick="closeModal('param-modal')">Annuler</button>
     </div>
   </div>
 </div>
 
-<!-- ============ FOOTER ============ -->
-<footer class="footer">
-  <div class="wrap">
-    <p style="margin:0 0 8px;"><strong>PredictiveFlow</strong> — Plateforme SaaS de maintenance prédictive</p>
-    <p style="margin:0;">© 2026 PredictiveFlow. Tous droits réservés.</p>
+<!-- Machine modal -->
+<div class="modal-overlay" id="machine-modal">
+  <div class="modal-box">
+    <h2 id="machine-modal-title">Ajouter une machine</h2>
+    <div class="form-group"><label>Nom *</label><input type="text" id="m-name" placeholder="ex: Compresseur C3" /></div>
+    <div class="form-group"><label>Type</label><input type="text" id="m-type" placeholder="ex: Compresseur" /></div>
+    <div class="form-group"><label>Statut</label>
+      <select id="m-status"><option value="ok">OK</option><option value="surveillance">Surveillance</option><option value="maintenance">Maintenance</option><option value="arret">Arrêt</option></select>
+    </div>
+    <div class="form-group"><label>Localisation</label><input type="text" id="m-location" placeholder="ex: Atelier B" /></div>
+    <div class="form-group"><label>Dernière inspection</label><input type="date" id="m-last-inspection" /></div>
+    <div class="form-group"><label>Notes</label><textarea id="m-notes" rows="2"></textarea></div>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="btn primary" onclick="saveMachine()">Enregistrer</button>
+      <button class="btn" onclick="closeModal('machine-modal')">Annuler</button>
+    </div>
   </div>
-</footer>
+</div>
 
-<!-- ============ JAVASCRIPT ============ -->
+<!-- Raw data modal -->
+<div class="modal-overlay" id="raw-modal">
+  <div class="modal-box">
+    <h2 id="raw-modal-title">Ajouter une mesure</h2>
+    <div class="form-group"><label>Date / heure</label><input type="datetime-local" id="r-date" /></div>
+    <div class="two-cols">
+      <div class="form-group"><label>Ligne</label><input type="text" id="r-ligne" placeholder="ex: Ligne 1" /></div>
+      <div class="form-group"><label>Zone</label><input type="text" id="r-zone" placeholder="ex: Atelier A" /></div>
+    </div>
+    <div class="two-cols">
+      <div class="form-group"><label>Composant</label><input type="text" id="r-composant" placeholder="ex: Pompe P1" /></div>
+      <div class="form-group"><label>Tag</label><input type="text" id="r-tag" placeholder="ex: TT-101" /></div>
+    </div>
+    <div class="two-cols">
+      <div class="form-group"><label>Variable</label><input type="text" id="r-variable" placeholder="ex: Température" /></div>
+      <div class="form-group"><label>Valeur *</label><input type="number" step="any" id="r-valeur" placeholder="ex: 85" /></div>
+    </div>
+    <div class="two-cols">
+      <div class="form-group"><label>Lot / Produit</label><input type="text" id="r-lot" placeholder="ex: LOT-2024-001" /></div>
+      <div class="form-group"><label>Commentaire</label><input type="text" id="r-commentaire" /></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="btn primary" onclick="saveRaw()">Enregistrer</button>
+      <button class="btn" onclick="closeModal('raw-modal')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk import modal -->
+<div class="modal-overlay" id="bulk-modal">
+  <div class="modal-box" style="max-width:600px;">
+    <h2>Import en lot</h2>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:14px;">Collez vos données au format CSV (date, ligne, zone, composant, tag, variable, valeur, lot, commentaire) — une ligne par mesure.</p>
+    <div class="form-group">
+      <label>Données CSV</label>
+      <textarea id="bulk-data" rows="10" style="width:100%;font-family:monospace;font-size:13px;" placeholder="2024-01-15 08:00,Ligne 1,Atelier A,Pompe P1,TT-101,Température,85,LOT-001,OK
+2024-01-15 08:05,Ligne 1,Atelier A,Pompe P1,TT-101,Température,92,LOT-001,Chaud"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="btn primary" onclick="importBulk()">Importer</button>
+      <button class="btn" onclick="closeModal('bulk-modal')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- Maintenance modal -->
+<div class="modal-overlay" id="maint-modal">
+  <div class="modal-box" style="max-width:560px;">
+    <h2 id="maint-modal-title">Enregistrer une panne</h2>
+    <div class="form-group"><label>Date de la panne</label><input type="datetime-local" id="mt-date" /></div>
+    <div class="form-group"><label>Composant</label><input type="text" id="mt-composant" placeholder="ex: Pompe P1" /></div>
+    <div class="form-group"><label>Type de panne</label><input type="text" id="mt-type" placeholder="ex: Fuite hydraulique" /></div>
+    <div class="two-cols">
+      <div class="form-group"><label>Temps de fonctionnement avant panne (h)</label><input type="number" step="any" id="mt-temps" placeholder="ex: 1200" /></div>
+      <div class="form-group"><label>Cycles avant panne</label><input type="number" step="any" id="mt-cycles" placeholder="ex: 50000" /></div>
+    </div>
+    <div class="form-group"><label>Action réalisée</label><input type="text" id="mt-action" placeholder="ex: Remplacement joint" /></div>
+    <div class="form-group"><label>Pièce remplacée</label><input type="text" id="mt-piece" placeholder="ex: Joint SPI 40mm" /></div>
+    <div class="two-cols">
+      <div class="form-group"><label>Durée d'arrêt (h)</label><input type="number" step="any" id="mt-arret" placeholder="ex: 4" /></div>
+      <div class="form-group"><label>Coût estimé (€)</label><input type="number" step="any" id="mt-cout" placeholder="ex: 350" /></div>
+    </div>
+    <div class="form-group"><label>Commentaire</label><textarea id="mt-commentaire" rows="2"></textarea></div>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="btn primary" onclick="saveMaint()">Enregistrer</button>
+      <button class="btn" onclick="closeModal('maint-modal')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCRIPT ============ -->
 <script>
-const API = '';
-let token = null;
+const API = ''; // same origin
+let token = localStorage.getItem('pf_token');
 let currentUser = null;
-let plans = [];
-let editingPlanId = null;
 
-// ---- Init ----
-async function init() {
-  token = localStorage.getItem('pf_token');
-  await loadPlans();
-  if (token) {
-    try {
-      const res = await fetch(API + '/api/me', { headers: { Authorization: 'Bearer ' + token } });
-      if (res.ok) {
-        const data = await res.json();
-        currentUser = data;
-        showDashboard(data.role);
-      } else {
-        localStorage.removeItem('pf_token');
-      }
-    } catch(e) {}
-  }
-}
-
-// ---- Plans ----
-async function loadPlans() {
-  try {
-    const res = await fetch(API + '/api/plans');
-    plans = await res.json();
-    renderPlans();
-    populatePlanSelect();
-  } catch(e) { console.error(e); }
-}
-
-function renderPlans() {
-  const grid = document.getElementById('plans-grid');
-  grid.innerHTML = plans.map(p => {
-    const priceStr = p.price > 0 ? p.price + '€' : 'Sur devis';
-    return `
-    <div class="plan ${p.id === 'pro' || p.recommended ? 'pro' : ''}">
-      ${p.recommended ? '<span class="tag">Recommandée</span>' : ''}
-      <h3 style="margin:0 0 6px;font-size:20px;">${p.name}</h3>
-      <div class="price">${priceStr} ${p.price > 0 ? '<small>' + (p.per || '/mois') + '</small>' : ''}</div>
-      <ul class="feature-list">
-        ${(p.features || []).map(f => '<li>' + f + '</li>').join('')}
-      </ul>
-      <button class="btn ${p.id === 'pro' || p.recommended ? 'primary' : 'dark'}" style="width:100%;margin-top:16px;" onclick="showRegister('${p.id}')">Choisir ${p.name}</button>
-    </div>`;
-  }).join('');
-}
-
-function populatePlanSelect() {
-  const sel = document.getElementById('reg-plan');
-  if (!sel) return;
-  sel.innerHTML = plans.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-}
-
-// ---- Auth ----
+// ---- AUTH ----
 function showLogin() {
   document.getElementById('auth-title').textContent = 'Connexion';
   document.getElementById('login-form').style.display = 'block';
   document.getElementById('register-form').style.display = 'none';
-  document.getElementById('auth-message').className = 'demo-auth-message';
-  document.getElementById('auth-message').textContent = '';
+  document.getElementById('auth-msg').className = 'auth-msg';
   document.getElementById('auth-modal').classList.add('active');
 }
-
-function showRegister(planId) {
+function showRegister() {
   document.getElementById('auth-title').textContent = 'Inscription';
   document.getElementById('login-form').style.display = 'none';
   document.getElementById('register-form').style.display = 'block';
-  document.getElementById('auth-message').className = 'demo-auth-message';
-  document.getElementById('auth-message').textContent = '';
-  if (planId) document.getElementById('reg-plan').value = planId;
+  document.getElementById('auth-msg').className = 'auth-msg';
   document.getElementById('auth-modal').classList.add('active');
 }
-
-function closeAuth() {
-  document.getElementById('auth-modal').classList.remove('active');
-}
-
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 function authMsg(text, type) {
-  const el = document.getElementById('auth-message');
+  const el = document.getElementById('auth-msg');
   el.textContent = text;
-  el.className = 'demo-auth-message ' + type;
+  el.className = 'auth-msg ' + type;
 }
 
 async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;
-  if (!email || !password) { authMsg('Veuillez remplir tous les champs.', 'error'); return; }
+  if (!email || !password) { authMsg('Remplissez tous les champs.', 'error'); return; }
   try {
-    const res = await fetch(API + '/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
+    const res = await fetch(API + '/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
     const data = await res.json();
     if (!res.ok) { authMsg(data.error || 'Erreur de connexion.', 'error'); return; }
     token = data.token;
     localStorage.setItem('pf_token', token);
     currentUser = data;
-    closeAuth();
-    showDashboard(data.role);
-    if (data.role === 'admin') loadAdminData();
-  } catch(e) { authMsg('Erreur réseau.', 'error'); }
+    enterApp(data);
+  } catch (e) { authMsg('Erreur réseau.', 'error'); }
 }
 
 async function doRegister() {
@@ -660,35 +608,24 @@ async function doRegister() {
   const company = document.getElementById('reg-company').value.trim();
   const email = document.getElementById('reg-email').value.trim();
   const password = document.getElementById('reg-password').value;
-  const planId = document.getElementById('reg-plan').value;
   if (!name || !email || !password) { authMsg('Nom, email et mot de passe requis.', 'error'); return; }
   try {
-    const res = await fetch(API + '/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, company, email, password, planId })
-    });
+    const res = await fetch(API + '/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, company, email, password }) });
     const data = await res.json();
     if (!res.ok) { authMsg(data.error || 'Erreur.', 'error'); return; }
-    authMsg('Compte créé ! Connexion en cours…', 'success');
-    // Auto-login
-    setTimeout(() => doLogin2(email, password), 800);
-  } catch(e) { authMsg('Erreur réseau.', 'error'); }
+    authMsg('Compte créé ! Connexion...', 'success');
+    setTimeout(() => doAutoLogin(email, password), 600);
+  } catch (e) { authMsg('Erreur réseau.', 'error'); }
 }
 
-async function doLogin2(email, password) {
-  const res = await fetch(API + '/api/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password })
-  });
+async function doAutoLogin(email, password) {
+  const res = await fetch(API + '/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
   const data = await res.json();
   if (res.ok) {
     token = data.token;
     localStorage.setItem('pf_token', token);
     currentUser = data;
-    closeAuth();
-    showDashboard(data.role);
+    enterApp(data);
   }
 }
 
@@ -696,292 +633,682 @@ function logout() {
   token = null;
   currentUser = null;
   localStorage.removeItem('pf_token');
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('nav-plans').style.display = 'none';
-  document.getElementById('nav-users').style.display = 'none';
-  document.getElementById('nav-log').style.display = 'none';
+  document.getElementById('app').classList.remove('active');
+  document.getElementById('landing').style.display = 'block';
+  document.getElementById('nav-guest').style.display = 'flex';
+  document.getElementById('nav-user').style.display = 'none';
 }
 
-// ---- Dashboard ----
-function showDashboard(role) {
-  document.getElementById('dashboard').style.display = 'block';
-  document.getElementById('dash-user').textContent = (currentUser.name || currentUser.email) + (role === 'admin' ? ' (Admin)' : ' (Client)');
-  if (role === 'admin') {
-    document.getElementById('nav-plans').style.display = 'block';
-    document.getElementById('nav-users').style.display = 'block';
-    document.getElementById('nav-log').style.display = 'block';
-  }
-  switchView('overview');
-  loadMachines();
-  document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
+function enterApp(user) {
+  document.getElementById('auth-modal').classList.remove('active');
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('app').classList.add('active');
+  document.getElementById('nav-guest').style.display = 'none';
+  document.getElementById('nav-user').style.display = 'flex';
+  document.getElementById('app-email').textContent = user.email;
+  document.getElementById('app-role').textContent = '(' + user.role + ')';
+  document.getElementById('nav-email').textContent = user.email;
+  switchView('dashboard');
+  loadAll();
 }
 
+// ---- VIEW SWITCH ----
 function switchView(view) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById('view-' + view).classList.add('active');
-  document.querySelectorAll('#sidebar-nav a').forEach(a => a.classList.remove('active'));
-  document.querySelector(`#sidebar-nav a[data-view="${view}"]`).classList.add('active');
-  if (view === 'machines' || view === 'overview') loadMachines();
-  if (view === 'plans') loadAdminPlans();
-  if (view === 'users') loadAdminUsers();
-  if (view === 'log') loadAdminLog();
+  document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+  const el = document.getElementById('view-' + view);
+  if (el) el.classList.add('active');
+  const nav = document.querySelector(`.sidebar a[data-view="${view}"]`);
+  if (nav) nav.classList.add('active');
+
+  // Load data for the view
+  if (view === 'dashboard') loadDashboard();
+  else if (view === 'parameters') loadParams();
+  else if (view === 'machines') loadMachines();
+  else if (view === 'rawdata') loadRawData();
+  else if (view === 'alarms') loadAlarms();
+  else if (view === 'maintenance') loadMaintenance();
+  else if (view === 'indicators') loadIndicators();
+  else if (view === 'weibull') loadWeibullOptions();
 }
 
-// ---- Admin: Plans ----
-async function loadAdminPlans() {
-  if (!plans.length) await loadPlans();
-  const tbody = document.querySelector('#admin-plans-table tbody');
-  tbody.innerHTML = plans.map(p => `
+// ---- API HELPER ----
+async function api(path, method = 'GET', body = null) {
+  const opts = { method, headers: {} };
+  if (token) opts.headers['Authorization'] = 'Bearer ' + token;
+  if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+  const res = await fetch(API + path, opts);
+  if (res.status === 401) { logout(); return null; }
+  return res.json();
+}
+
+// ---- DASHBOARD ----
+async function loadDashboard() {
+  const data = await api('/api/dashboard');
+  if (!data) return;
+  const sc = data.statusCounts;
+  document.getElementById('dash-stats').innerHTML = `
+    <div class="stat-card"><div class="label">Mesures totales</div><div class="value">${data.totalMeasures}</div></div>
+    <div class="stat-card alert"><div class="label">Alarmes</div><div class="value">${data.totalAlarms}</div></div>
+    <div class="stat-card warn"><div class="label">Pannes</div><div class="value">${data.totalPannes}</div></div>
+    <div class="stat-card"><div class="label">Coût total</div><div class="value">${data.totalCost} €</div></div>
+    <div class="stat-card"><div class="label">Arrêt total (h)</div><div class="value">${data.totalDowntime}</div></div>
+    <div class="stat-card"><div class="label">Paramètres</div><div class="value">${data.totalParameters}</div></div>
+  `;
+  // Alarms table
+  const tbody = document.getElementById('dash-alarms-body');
+  if (data.recentAlarms.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px;">Aucune alarme</td></tr>';
+  } else {
+    tbody.innerHTML = data.recentAlarms.map(a => `
+      <tr>
+        <td>${a.timestamp}</td>
+        <td>${a.composant}</td>
+        <td>${a.variable}</td>
+        <td>${a.valeur} ${a.unite_auto||''}</td>
+        <td><span class="badge alarm">${a.statut_auto}</span></td>
+        <td>[${a.seuil_bas_auto} ; ${a.seuil_haut_auto}]</td>
+      </tr>
+    `).join('');
+  }
+}
+
+// ---- PARAMETERS ----
+let editingParamId = null;
+
+async function loadParams() {
+  const data = await api('/api/parameters');
+  if (!data) return;
+  const tbody = document.getElementById('params-body');
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px;">Aucun paramètre. Cliquez sur "Ajouter".</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(p => `
     <tr>
-      <td>${p.name}</td>
-      <td>${p.price > 0 ? p.price + '€' + (p.per || '') : p.per || 'Sur devis'}</td>
-      <td>${p.recommended ? '⭐ Oui' : 'Non'}</td>
-      <td>
-        <button class="btn sm" onclick="openPlanModal('${p.id}')">Modifier</button>
-        <button class="btn sm danger" onclick="deletePlan('${p.id}')">Supprimer</button>
-      </td>
+      <td><strong>${p.composant||''}</strong></td>
+      <td>${p.zone||''}</td>
+      <td>${p.variable||''}</td>
+      <td>${p.tag||''}</td>
+      <td>${p.unite||''}</td>
+      <td>${p.seuil_bas||''}</td>
+      <td>${p.seuil_haut||''}</td>
+      <td><span class="badge ${(p.criticite||'').toLowerCase()}">${p.criticite||''}</span></td>
+      <td>${p.frequence_acquisition||''}</td>
+      <td><div class="row-actions">
+        <button onclick="editParam('${p.id}')">✏️</button>
+        <button class="del" onclick="delParam('${p.id}')">🗑️</button>
+      </div></td>
     </tr>
   `).join('');
 }
 
-function openPlanModal(id) {
-  editingPlanId = id || null;
-  if (id) {
-    const p = plans.find(x => x.id === id);
-    document.getElementById('plan-modal-title').textContent = 'Modifier — ' + p.name;
-    document.getElementById('plan-name').value = p.name;
-    document.getElementById('plan-price').value = p.price;
-    document.getElementById('plan-per').value = p.per || '';
-    document.getElementById('plan-features').value = (p.features || []).join('\n');
-    document.getElementById('plan-recommended').value = String(p.recommended);
+function openParamModal() {
+  editingParamId = null;
+  document.getElementById('param-modal-title').textContent = 'Ajouter un paramètre';
+  ['p-composant','p-zone','p-variable','p-tag','p-unite','p-seuil-bas','p-seuil-haut','p-frequence','p-date-mes','p-commentaire'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('p-type-signal').value = 'Analogique';
+  document.getElementById('p-criticite').value = 'Moyenne';
+  document.getElementById('param-modal').classList.add('active');
+}
+
+function editParam(id) {
+  api('/api/parameters').then(data => {
+    const p = data.find(x => x.id === id);
+    if (!p) return;
+    editingParamId = id;
+    document.getElementById('param-modal-title').textContent = 'Modifier le paramètre';
+    document.getElementById('p-composant').value = p.composant || '';
+    document.getElementById('p-zone').value = p.zone || '';
+    document.getElementById('p-variable').value = p.variable || '';
+    document.getElementById('p-tag').value = p.tag || '';
+    document.getElementById('p-unite').value = p.unite || '';
+    document.getElementById('p-type-signal').value = p.type_signal || 'Analogique';
+    document.getElementById('p-seuil-bas').value = p.seuil_bas || '';
+    document.getElementById('p-seuil-haut').value = p.seuil_haut || '';
+    document.getElementById('p-criticite').value = p.criticite || 'Moyenne';
+    document.getElementById('p-frequence').value = p.frequence_acquisition || '';
+    document.getElementById('p-date-mes').value = p.date_mise_en_service || '';
+    document.getElementById('p-commentaire').value = p.commentaire || '';
+    document.getElementById('param-modal').classList.add('active');
+  });
+}
+
+async function saveParam() {
+  const body = {
+    composant: document.getElementById('p-composant').value.trim(),
+    zone: document.getElementById('p-zone').value.trim(),
+    variable: document.getElementById('p-variable').value.trim(),
+    tag: document.getElementById('p-tag').value.trim(),
+    unite: document.getElementById('p-unite').value.trim(),
+    type_signal: document.getElementById('p-type-signal').value,
+    seuil_bas: document.getElementById('p-seuil-bas').value,
+    seuil_haut: document.getElementById('p-seuil-haut').value,
+    criticite: document.getElementById('p-criticite').value,
+    frequence_acquisition: document.getElementById('p-frequence').value.trim(),
+    date_mise_en_service: document.getElementById('p-date-mes').value,
+    commentaire: document.getElementById('p-commentaire').value.trim()
+  };
+  if (!body.composant || !body.variable) { alert('Composant et variable sont requis.'); return; }
+  if (editingParamId) {
+    await api('/api/parameters/' + editingParamId, 'PUT', body);
   } else {
-    document.getElementById('plan-modal-title').textContent = 'Nouvelle formule';
-    document.getElementById('plan-name').value = '';
-    document.getElementById('plan-price').value = '';
-    document.getElementById('plan-per').value = '/mois';
-    document.getElementById('plan-features').value = '';
-    document.getElementById('plan-recommended').value = 'false';
+    await api('/api/parameters', 'POST', body);
   }
-  document.getElementById('plan-modal').classList.add('active');
+  closeModal('param-modal');
+  loadParams();
 }
 
-function closePlanModal() {
-  document.getElementById('plan-modal').classList.remove('active');
+async function delParam(id) {
+  if (!confirm('Supprimer ce paramètre ?')) return;
+  await api('/api/parameters/' + id, 'DELETE');
+  loadParams();
 }
 
-async function savePlan() {
-  const name = document.getElementById('plan-name').value.trim();
-  const price = parseInt(document.getElementById('plan-price').value) || 0;
-  const per = document.getElementById('plan-per').value.trim() || '/mois';
-  const features = document.getElementById('plan-features').value.split('\n').filter(f => f.trim());
-  const recommended = document.getElementById('plan-recommended').value === 'true';
-  if (!name) { alert('Nom requis'); return; }
-
-  const body = { name, price, per, features, recommended };
-  try {
-    if (editingPlanId) {
-      await fetch(API + '/api/plans/' + editingPlanId, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-        body: JSON.stringify(body)
-      });
-    } else {
-      await fetch(API + '/api/plans', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-        body: JSON.stringify(body)
-      });
-    }
-    closePlanModal();
-    await loadPlans();
-    loadAdminPlans();
-  } catch(e) { alert('Erreur: ' + e.message); }
-}
-
-async function deletePlan(id) {
-  if (!confirm('Supprimer cette formule ?')) return;
-  await fetch(API + '/api/plans/' + id, { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } });
-  await loadPlans();
-  loadAdminPlans();
-}
-
-// ---- Admin: Users ----
-async function loadAdminUsers() {
-  try {
-    const res = await fetch(API + '/api/users', { headers: { Authorization: 'Bearer ' + token } });
-    const users = await res.json();
-    const tbody = document.querySelector('#admin-users-table tbody');
-    if (!users.length) {
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);">Aucun utilisateur inscrit.</td></tr>';
-      return;
-    }
-    tbody.innerHTML = users.map(u => `
-      <tr>
-        <td>${u.name}</td>
-        <td>${u.company || '—'}</td>
-        <td>${u.email}</td>
-        <td>${plans.find(p => p.id === u.planId)?.name || '—'}</td>
-        <td>${u.created}</td>
-        <td><button class="btn sm danger" onclick="deleteUser('${u.id}')">Supprimer</button></td>
-      </tr>
-    `).join('');
-  } catch(e) { console.error(e); }
-}
-
-async function deleteUser(id) {
-  if (!confirm('Supprimer cet utilisateur ?')) return;
-  await fetch(API + '/api/users/' + id, { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } });
-  loadAdminUsers();
-}
-
-// ---- Admin: Log ----
-async function loadAdminLog() {
-  try {
-    const res = await fetch(API + '/api/admin/log', { headers: { Authorization: 'Bearer ' + token } });
-    const log = await res.json();
-    const ul = document.getElementById('admin-log-list');
-    if (!log.length) {
-      ul.innerHTML = '<li>Aucun événement.</li>';
-      return;
-    }
-    ul.innerHTML = log.map(l => `<li><strong>${l.date}</strong> — ${l.text}</li>`).join('');
-  } catch(e) { console.error(e); }
-}
-
-
-// ---- Machines ----
-let machines = [];
+// ---- MACHINES ----
 let editingMachineId = null;
 
 async function loadMachines() {
-  if (!token) return;
-  try {
-    const res = await fetch(API + '/api/machines', { headers: { Authorization: 'Bearer ' + token } });
-    if (!res.ok) return;
-    machines = await res.json();
-    renderMachines();
-    renderOverview();
-  } catch(e) { console.error(e); }
-}
-
-const STATUS_MAP = {
-  ok:          { label: 'OK',           cls: 'ok' },
-  warn:        { label: 'Surveillance',  cls: 'warn' },
-  maintenance: { label: 'Maintenance',   cls: 'info' }
-};
-
-function renderMachines() {
-  const tbody = document.getElementById('machines-tbody');
-  if (!machines.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);">Aucune machine. Cliquez sur « + Ajouter une machine » pour commencer.</td></tr>';
+  const data = await api('/api/machines');
+  if (!data) return;
+  const tbody = document.getElementById('machines-body');
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px;">Aucune machine.</td></tr>';
     return;
   }
-  tbody.innerHTML = machines.map(m => {
-    const s = STATUS_MAP[m.status] || STATUS_MAP.ok;
-    return `
+  tbody.innerHTML = data.map(m => `
     <tr>
-      <td><code style="font-size:12px;color:var(--muted);">${m.id}</code></td>
       <td><strong>${m.name}</strong></td>
-      <td>${m.type || '—'}</td>
-      <td><span class="pill ${s.cls}">${s.label}</span></td>
-      <td>${m.location || '—'}</td>
-      <td>${m.lastInspection || '—'}</td>
-      <td>${m.nextPrediction || '—'}</td>
-      <td>
-        <button class="btn sm" onclick="openMachineModal('${m.id}')">Modifier</button>
-        <button class="btn sm danger" onclick="deleteMachine('${m.id}')">Supprimer</button>
-      </td>
-    </tr>`;
-  }).join('');
+      <td>${m.type||''}</td>
+      <td><span class="badge ${m.status==='ok'?'ok':m.status==='maintenance'?'warn':'alarm'}">${m.status||'ok'}</span></td>
+      <td>${m.location||''}</td>
+      <td>${m.lastInspection||'-'}</td>
+      <td><div class="row-actions">
+        <button onclick="editMachine('${m.id}')">✏️</button>
+        <button class="del" onclick="delMachine('${m.id}')">🗑️</button>
+      </div></td>
+    </tr>
+  `).join('');
 }
 
-function renderOverview() {
-  document.getElementById('stat-total').textContent = machines.length;
-  document.getElementById('stat-alerts').textContent = machines.filter(m => m.status === 'warn').length;
-  document.getElementById('stat-maintenance').textContent = machines.filter(m => m.status === 'maintenance').length;
-  document.getElementById('stat-ok').textContent = machines.filter(m => m.status === 'ok').length;
-
-  const parc = document.getElementById('overview-parc');
-  if (!machines.length) {
-    parc.innerHTML = '<p class="small-muted" style="margin:0;">Aucune machine enregistrée.</p>';
-    return;
-  }
-  parc.innerHTML = machines.slice(0, 8).map(m => {
-    const s = STATUS_MAP[m.status] || STATUS_MAP.ok;
-    return `<div class="status-row"><span>${m.name}</span><span class="pill ${s.cls}">${s.label}</span></div>`;
-  }).join('');
-}
-
-function openMachineModal(id) {
-  editingMachineId = id || null;
-  if (id) {
-    const m = machines.find(x => x.id === id);
-    if (!m) return;
-    document.getElementById('machine-modal-title').textContent = 'Modifier — ' + m.name;
-    document.getElementById('machine-name').value = m.name;
-    document.getElementById('machine-type').value = m.type || 'Autre';
-    document.getElementById('machine-status').value = m.status || 'ok';
-    document.getElementById('machine-location').value = m.location || '';
-    document.getElementById('machine-last-insp').value = m.lastInspection || '';
-    document.getElementById('machine-next-pred').value = m.nextPrediction || '';
-    document.getElementById('machine-notes').value = m.notes || '';
-  } else {
-    document.getElementById('machine-modal-title').textContent = 'Ajouter une machine';
-    document.getElementById('machine-name').value = '';
-    document.getElementById('machine-type').value = 'Pompe';
-    document.getElementById('machine-status').value = 'ok';
-    document.getElementById('machine-location').value = '';
-    document.getElementById('machine-last-insp').value = '';
-    document.getElementById('machine-next-pred').value = '';
-    document.getElementById('machine-notes').value = '';
-  }
+function openMachineModal() {
+  editingMachineId = null;
+  document.getElementById('machine-modal-title').textContent = 'Ajouter une machine';
+  ['m-name','m-type','m-location','m-last-inspection','m-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('m-status').value = 'ok';
   document.getElementById('machine-modal').classList.add('active');
 }
 
-function closeMachineModal() {
-  document.getElementById('machine-modal').classList.remove('active');
+function editMachine(id) {
+  api('/api/machines').then(data => {
+    const m = data.find(x => x.id === id);
+    if (!m) return;
+    editingMachineId = id;
+    document.getElementById('machine-modal-title').textContent = 'Modifier la machine';
+    document.getElementById('m-name').value = m.name || '';
+    document.getElementById('m-type').value = m.type || '';
+    document.getElementById('m-status').value = m.status || 'ok';
+    document.getElementById('m-location').value = m.location || '';
+    document.getElementById('m-last-inspection').value = m.lastInspection || '';
+    document.getElementById('m-notes').value = m.notes || '';
+    document.getElementById('machine-modal').classList.add('active');
+  });
 }
 
 async function saveMachine() {
-  const name = document.getElementById('machine-name').value.trim();
-  if (!name) { alert('Nom de la machine requis'); return; }
   const body = {
-    name,
-    type: document.getElementById('machine-type').value,
-    status: document.getElementById('machine-status').value,
-    location: document.getElementById('machine-location').value.trim(),
-    lastInspection: document.getElementById('machine-last-insp').value.trim(),
-    nextPrediction: document.getElementById('machine-next-pred').value.trim(),
-    notes: document.getElementById('machine-notes').value.trim()
+    name: document.getElementById('m-name').value.trim(),
+    type: document.getElementById('m-type').value.trim(),
+    status: document.getElementById('m-status').value,
+    location: document.getElementById('m-location').value.trim(),
+    lastInspection: document.getElementById('m-last-inspection').value,
+    notes: document.getElementById('m-notes').value.trim()
   };
-  try {
-    if (editingMachineId) {
-      await fetch(API + '/api/machines/' + editingMachineId, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-        body: JSON.stringify(body)
-      });
-    } else {
-      await fetch(API + '/api/machines', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-        body: JSON.stringify(body)
-      });
-    }
-    closeMachineModal();
-    await loadMachines();
-  } catch(e) { alert('Erreur: ' + e.message); }
+  if (!body.name) { alert('Le nom est requis.'); return; }
+  if (editingMachineId) await api('/api/machines/' + editingMachineId, 'PUT', body);
+  else await api('/api/machines', 'POST', body);
+  closeModal('machine-modal');
+  loadMachines();
 }
 
-async function deleteMachine(id) {
-  const m = machines.find(x => x.id === id);
-  if (!confirm('Supprimer la machine « ' + (m ? m.name : id) + ' » ?')) return;
-  await fetch(API + '/api/machines/' + id, { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } });
-  await loadMachines();
+async function delMachine(id) {
+  if (!confirm('Supprimer cette machine ?')) return;
+  await api('/api/machines/' + id, 'DELETE');
+  loadMachines();
 }
 
-// ---- Start ----
-init();
+// ---- RAW DATA ----
+let editingRawId = null;
+
+async function loadRawData() {
+  const data = await api('/api/raw-data');
+  if (!data) return;
+  const tbody = document.getElementById('raw-body');
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;color:var(--muted);padding:20px;">Aucune mesure. Cliquez sur "Ajouter une mesure".</td></tr>';
+    document.getElementById('raw-notice').style.display = 'none';
+    return;
+  }
+  document.getElementById('raw-notice').style.display = 'block';
+  tbody.innerHTML = data.map(r => `
+    <tr>
+      <td>${r.date_mesure||''}</td>
+      <td>${r.ligne||''}</td>
+      <td>${r.zone||''}</td>
+      <td>${r.composant||''}</td>
+      <td>${r.tag||''}</td>
+      <td>${r.variable||''}</td>
+      <td><strong>${r.valeur}</strong></td>
+      <td>${r.unite_auto||''}</td>
+      <td><span class="badge ${r.statut_auto==='OK'?'ok':r.statut_auto==='N/A'?'warn':'alarm'}">${r.statut_auto}</span></td>
+      <td>${r.seuil_bas_auto||''}</td>
+      <td>${r.seuil_haut_auto||''}</td>
+      <td><div class="row-actions">
+        <button onclick="editRaw('${r.id}')">✏️</button>
+        <button class="del" onclick="delRaw('${r.id}')">🗑️</button>
+      </div></td>
+    </tr>
+  `).join('');
+}
+
+function openRawModal() {
+  editingRawId = null;
+  document.getElementById('raw-modal-title').textContent = 'Ajouter une mesure';
+  ['r-ligne','r-zone','r-composant','r-tag','r-variable','r-valeur','r-lot','r-commentaire'].forEach(id => document.getElementById(id).value = '');
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  document.getElementById('r-date').value = now.toISOString().slice(0,16);
+  document.getElementById('raw-modal').classList.add('active');
+}
+
+function editRaw(id) {
+  api('/api/raw-data').then(data => {
+    const r = data.find(x => x.id === id);
+    if (!r) return;
+    editingRawId = id;
+    document.getElementById('raw-modal-title').textContent = 'Modifier la mesure';
+    document.getElementById('r-ligne').value = r.ligne || '';
+    document.getElementById('r-zone').value = r.zone || '';
+    document.getElementById('r-composant').value = r.composant || '';
+    document.getElementById('r-tag').value = r.tag || '';
+    document.getElementById('r-variable').value = r.variable || '';
+    document.getElementById('r-valeur').value = r.valeur || '';
+    document.getElementById('r-lot').value = r.lot_produit || '';
+    document.getElementById('r-commentaire').value = r.commentaire || '';
+    document.getElementById('raw-modal').classList.add('active');
+  });
+}
+
+async function saveRaw() {
+  const dateVal = document.getElementById('r-date').value;
+  const body = {
+    date_mesure: dateVal ? new Date(dateVal).toLocaleString('fr-FR') : new Date().toLocaleString('fr-FR'),
+    ligne: document.getElementById('r-ligne').value.trim(),
+    zone: document.getElementById('r-zone').value.trim(),
+    composant: document.getElementById('r-composant').value.trim(),
+    tag: document.getElementById('r-tag').value.trim(),
+    variable: document.getElementById('r-variable').value.trim(),
+    valeur: document.getElementById('r-valeur').value,
+    lot_produit: document.getElementById('r-lot').value.trim(),
+    commentaire: document.getElementById('r-commentaire').value.trim()
+  };
+  if (body.valeur === '' || body.valeur === undefined) { alert('La valeur est requise.'); return; }
+  if (editingRawId) await api('/api/raw-data/' + editingRawId, 'PUT', body);
+  else await api('/api/raw-data', 'POST', body);
+  closeModal('raw-modal');
+  loadRawData();
+}
+
+async function delRaw(id) {
+  if (!confirm('Supprimer cette mesure ?')) return;
+  await api('/api/raw-data/' + id, 'DELETE');
+  loadRawData();
+}
+
+async function clearRawData() {
+  if (!confirm('Effacer TOUTES les mesures et alarmes ?')) return;
+  await api('/api/raw-data', 'DELETE');
+  loadRawData();
+}
+
+// ---- BULK IMPORT ----
+function openBulkModal() {
+  document.getElementById('bulk-data').value = '';
+  document.getElementById('bulk-modal').classList.add('active');
+}
+
+async function importBulk() {
+  const csv = document.getElementById('bulk-data').value.trim();
+  if (!csv) { alert('Collez vos données CSV.'); return; }
+  const lines = csv.split('\n').map(l => l.trim()).filter(l => l);
+  const rows = lines.map(line => {
+    const parts = line.split(',').map(s => s.trim());
+    return {
+      date_mesure: parts[0] || new Date().toLocaleString('fr-FR'),
+      ligne: parts[1] || '',
+      zone: parts[2] || '',
+      composant: parts[3] || '',
+      tag: parts[4] || '',
+      variable: parts[5] || '',
+      valeur: parts[6] || '',
+      lot_produit: parts[7] || '',
+      commentaire: parts[8] || ''
+    };
+  });
+  const res = await api('/api/raw-data', 'POST', rows);
+  closeModal('bulk-modal');
+  loadRawData();
+}
+
+// ---- ALARMS ----
+async function loadAlarms() {
+  const data = await api('/api/alarms');
+  if (!data) return;
+  const tbody = document.getElementById('alarms-body');
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:20px;">Aucune alarme. Les alarmes apparaissent quand une mesure dépasse un seuil.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(a => `
+    <tr>
+      <td>${a.timestamp||''}</td>
+      <td>${a.ligne||''}</td>
+      <td>${a.zone||''}</td>
+      <td>${a.composant||''}</td>
+      <td>${a.variable||''}</td>
+      <td><strong>${a.valeur}</strong> ${a.unite_auto||''}</td>
+      <td>${a.unite_auto||''}</td>
+      <td><span class="badge alarm">${a.statut_auto}</span></td>
+      <td>[${a.seuil_bas_auto||''} ; ${a.seuil_haut_auto||''}]</td>
+    </tr>
+  `).join('');
+}
+
+async function clearAlarms() {
+  if (!confirm('Effacer toutes les alarmes ?')) return;
+  await api('/api/alarms', 'DELETE');
+  loadAlarms();
+}
+
+// ---- MAINTENANCE ----
+let editingMaintId = null;
+
+async function loadMaintenance() {
+  const data = await api('/api/maintenance');
+  if (!data) return;
+  const tbody = document.getElementById('maint-body');
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:20px;">Aucune panne enregistrée.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(m => `
+    <tr>
+      <td>${m.id_panne||''}</td>
+      <td>${m.date_panne||''}</td>
+      <td><strong>${m.composant||''}</strong></td>
+      <td>${m.type_panne||''}</td>
+      <td>${m.temps_fonctionnement_avant_panne||''} h</td>
+      <td>${m.cycles_avant_panne||''}</td>
+      <td>${m.action_realisee||''}</td>
+      <td>${m.piece_remplacee||''}</td>
+      <td>${m.duree_arret||''} h</td>
+      <td>${m.cout_estime||''} €</td>
+      <td><div class="row-actions">
+        <button onclick="editMaint('${m.id}')">✏️</button>
+        <button class="del" onclick="delMaint('${m.id}')">🗑️</button>
+      </div></td>
+    </tr>
+  `).join('');
+}
+
+function openMaintModal() {
+  editingMaintId = null;
+  document.getElementById('maint-modal-title').textContent = 'Enregistrer une panne';
+  ['mt-composant','mt-type','mt-temps','mt-cycles','mt-action','mt-piece','mt-arret','mt-cout','mt-commentaire'].forEach(id => document.getElementById(id).value = '');
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  document.getElementById('mt-date').value = now.toISOString().slice(0,16);
+  document.getElementById('maint-modal').classList.add('active');
+}
+
+function editMaint(id) {
+  api('/api/maintenance').then(data => {
+    const m = data.find(x => x.id === id);
+    if (!m) return;
+    editingMaintId = id;
+    document.getElementById('maint-modal-title').textContent = 'Modifier la panne';
+    document.getElementById('mt-date').value = m.date_panne || '';
+    document.getElementById('mt-composant').value = m.composant || '';
+    document.getElementById('mt-type').value = m.type_panne || '';
+    document.getElementById('mt-temps').value = m.temps_fonctionnement_avant_panne || '';
+    document.getElementById('mt-cycles').value = m.cycles_avant_panne || '';
+    document.getElementById('mt-action').value = m.action_realisee || '';
+    document.getElementById('mt-piece').value = m.piece_remplacee || '';
+    document.getElementById('mt-arret').value = m.duree_arret || '';
+    document.getElementById('mt-cout').value = m.cout_estime || '';
+    document.getElementById('mt-commentaire').value = m.commentaire || '';
+    document.getElementById('maint-modal').classList.add('active');
+  });
+}
+
+async function saveMaint() {
+  const dateVal = document.getElementById('mt-date').value;
+  const body = {
+    date_panne: dateVal ? new Date(dateVal).toLocaleString('fr-FR') : new Date().toLocaleString('fr-FR'),
+    composant: document.getElementById('mt-composant').value.trim(),
+    type_panne: document.getElementById('mt-type').value.trim(),
+    temps_fonctionnement_avant_panne: document.getElementById('mt-temps').value,
+    cycles_avant_panne: document.getElementById('mt-cycles').value,
+    action_realisee: document.getElementById('mt-action').value.trim(),
+    piece_remplacee: document.getElementById('mt-piece').value.trim(),
+    duree_arret: document.getElementById('mt-arret').value,
+    cout_estime: document.getElementById('mt-cout').value,
+    commentaire: document.getElementById('mt-commentaire').value.trim()
+  };
+  if (editingMaintId) await api('/api/maintenance/' + editingMaintId, 'PUT', body);
+  else await api('/api/maintenance', 'POST', body);
+  closeModal('maint-modal');
+  loadMaintenance();
+}
+
+async function delMaint(id) {
+  if (!confirm('Supprimer cette panne ?')) return;
+  await api('/api/maintenance/' + id, 'DELETE');
+  loadMaintenance();
+}
+
+// ---- INDICATORS ----
+async function loadIndicators() {
+  const data = await api('/api/indicators');
+  if (!data) return;
+  const g = data.global;
+  document.getElementById('ind-global').innerHTML = `
+    <div class="stat-card"><div class="label">Mesures totales</div><div class="value">${g.totalMeasures}</div></div>
+    <div class="stat-card alert"><div class="label">Alarmes</div><div class="value">${g.totalAlarms}</div></div>
+    <div class="stat-card warn"><div class="label">Pannes</div><div class="value">${g.totalPannes}</div></div>
+    <div class="stat-card"><div class="label">Arrêt moyen (h)</div><div class="value">${g.avgDowntime.toFixed(1)}</div></div>
+    <div class="stat-card"><div class="label">Arrêt total (h)</div><div class="value">${g.totalDowntime}</div></div>
+    <div class="stat-card"><div class="label">Coût total (€)</div><div class="value">${g.totalCost}</div></div>
+  `;
+  // Per component
+  const compBody = document.getElementById('ind-comp-body');
+  if (data.perComponent.length === 0) {
+    compBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Aucune donnée</td></tr>';
+  } else {
+    compBody.innerHTML = data.perComponent.map(c => `
+      <tr>
+        <td><strong>${c.composant}</strong></td>
+        <td>${c.nb_pannes}</td>
+        <td>${c.temps_moyen_avant_panne} h</td>
+        <td>${c.cycles_moyens_avant_panne}</td>
+        <td>${c.cout_total} €</td>
+      </tr>
+    `).join('');
+  }
+  // Per variable
+  const varBody = document.getElementById('ind-var-body');
+  if (data.perVariable.length === 0) {
+    varBody.innerHTML = '<tr><td colspan="2" style="text-align:center;color:var(--muted);padding:20px;">Aucune alarme</td></tr>';
+  } else {
+    varBody.innerHTML = data.perVariable.map(v => `
+      <tr><td>${v.variable}</td><td><strong>${v.nb_alarmes}</strong></td></tr>
+    `).join('');
+  }
+}
+
+// ---- WEIBULL ----
+async function loadWeibullOptions() {
+  const data = await api('/api/weibull');
+  if (!data) return;
+  const select = document.getElementById('weibull-select');
+  const current = select.value;
+  select.innerHTML = '<option value="all">Tous</option>' +
+    (data.availableComponents||[]).map(c => `<option value="${c}">${c}</option>`).join('');
+  select.value = current || 'all';
+  renderWeibull(data);
+}
+
+async function loadWeibull() {
+  const comp = document.getElementById('weibull-select').value;
+  const data = await api('/api/weibull?composant=' + encodeURIComponent(comp));
+  if (!data) return;
+  renderWeibull(data);
+}
+
+function renderWeibull(data) {
+  const container = document.getElementById('weibull-results');
+  const components = data.components || {};
+  const keys = Object.keys(components).filter(k => components[k] !== null);
+
+  if (keys.length === 0) {
+    container.innerHTML = '<div class="empty">Aucune donnée suffisante pour l\'analyse Weibull.<br>Enregistrez des pannes avec "Temps de fonctionnement avant panne" dans la section Maintenance.</div>';
+    return;
+  }
+
+  container.innerHTML = keys.map(key => {
+    const r = components[key];
+    const label = key === '_global' ? '🌍 Vue globale (tous composants)' : '🔧 ' + key;
+    const points = r.points || [];
+    return `
+      <div class="weibull-result">
+        <h3>${label}</h3>
+        <div class="weibull-grid">
+          <div class="weibull-stat"><div class="label">β (beta) — forme</div><div class="value">${r.beta.toFixed(3)}</div><div class="sub">${r.beta < 1 ? 'taux de panne décroissant' : r.beta > 1 ? 'taux de panne croissant (usure)' : 'taux constant'}</div></div>
+          <div class="weibull-stat"><div class="label">α (alpha) — échelle</div><div class="value">${r.alpha.toFixed(1)}</div><div class="sub">heure</div></div>
+          <div class="weibull-stat"><div class="label">MTBF estimé</div><div class="value">${r.mtbf.toFixed(1)} h</div><div class="sub">temps moyen entre pannes</div></div>
+          <div class="weibull-stat"><div class="label">Échantillon (n)</div><div class="value">${r.n}</div><div class="sub">pannes enregistrées</div></div>
+        </div>
+        <div class="weibull-table">
+          <table>
+            <thead><tr><th>Temps/cycles</th><th>Rang</th><th>F(t) — proba panne</th><th>ln(t)</th><th>ln(-ln(1-F))</th><th>Fiabilité R(t)</th></tr></thead>
+            <tbody>
+              ${points.map(p => `
+                <tr>
+                  <td>${p.t}</td>
+                  <td>${p.rank}</td>
+                  <td>${(p.F*100).toFixed(1)}%</td>
+                  <td>${p.lnX.toFixed(4)}</td>
+                  <td>${isNaN(p.lnln) ? '-' : p.lnln.toFixed(4)}</td>
+                  <td>${((1-p.F)*100).toFixed(1)}%</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div class="weibull-chart">
+          <canvas id="chart-${key.replace(/[^a-zA-Z0-9]/g,'_')}" width="600" height="300"></canvas>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Draw charts
+  keys.forEach(key => {
+    const r = components[key];
+    const canvasId = 'chart-' + key.replace(/[^a-zA-Z0-9]/g,'_');
+    const canvas = document.getElementById(canvasId);
+    if (canvas) drawWeibullChart(canvas, r.points, r.beta, r.alpha);
+  });
+}
+
+function drawWeibullChart(canvas, points, beta, alpha) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const margin = 40;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#f8fafc';
+  ctx.fillRect(0, 0, W, H);
+
+  const validPts = points.filter(p => !isNaN(p.lnX) && !isNaN(p.lnln));
+  if (validPts.length < 2) return;
+
+  const minX = Math.min(...validPts.map(p => p.lnX));
+  const maxX = Math.max(...validPts.map(p => p.lnX));
+  const minY = Math.min(...validPts.map(p => p.lnln));
+  const maxY = Math.max(...validPts.map(p => p.lnln));
+  const rangeX = maxX - minX || 1;
+  const rangeY = maxY - minY || 1;
+
+  const sx = x => margin + (x - minX) / rangeX * (W - 2*margin);
+  const sy = y => H - margin - (y - minY) / rangeY * (H - 2*margin);
+
+  // Axes
+  ctx.strokeStyle = '#dbe3ee';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(margin, H-margin); ctx.lineTo(W-margin, H-margin);
+  ctx.moveTo(margin, H-margin); ctx.lineTo(margin, margin);
+  ctx.stroke();
+
+  // Regression line
+  const x1 = minX, x2 = maxX;
+  const y1 = beta * x1 - beta * Math.log(alpha);
+  const y2 = beta * x2 - beta * Math.log(alpha);
+  ctx.strokeStyle = '#ff7a59';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(sx(x1), sy(y1)); ctx.lineTo(sx(x2), sy(y2));
+  ctx.stroke();
+
+  // Data points
+  ctx.fillStyle = '#2563eb';
+  validPts.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(sx(p.lnX), sy(p.lnln), 4, 0, Math.PI*2);
+    ctx.fill();
+  });
+
+  // Labels
+  ctx.fillStyle = '#64748b';
+  ctx.font = '12px sans-serif';
+  ctx.fillText('ln(t)', W/2, H-8);
+  ctx.save();
+  ctx.translate(12, H/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('ln(-ln(1-F))', -40, 0);
+  ctx.restore();
+}
+
+// ---- LOAD ALL ----
+function loadAll() {
+  loadDashboard();
+}
+
+// ---- INIT ----
+(async function init() {
+  if (token) {
+    try {
+      const res = await fetch(API + '/api/me', { headers: { 'Authorization': 'Bearer ' + token } });
+      if (res.ok) {
+        const data = await res.json();
+        enterApp({ email: data.email, role: data.role });
+      } else {
+        localStorage.removeItem('pf_token');
+      }
+    } catch (e) {}
+  }
+})();
 </script>
+
 </body>
 </html>
