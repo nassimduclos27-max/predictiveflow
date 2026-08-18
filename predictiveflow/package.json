@@ -1,0 +1,21 @@
+{
+  "name": "predictiveflow-backend",
+  "version": "1.1.0",
+  "description": "Backend PredictiveFlow (Express + lowdb + jwt)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.6",
+    "cors": "^2.8.6",
+    "express": "^4.22.2",
+    "jsonwebtoken": "^9.0.3",
+    "lowdb": "^6.1.1",
+    "nanoid": "^4.0.2"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
